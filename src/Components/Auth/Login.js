@@ -42,13 +42,13 @@ class Login extends React.Component {
         const { user, login } = this.props;
         return <div>
             <List>
-            <RaisedButton
+            {/*<RaisedButton
                 style={size}
                 label="Google"
                 labelPosition="after"
                 icon={<GoogleIcon style={iconSize} />}
                 onTouchTap={login.bind(null, 'google')}
-            /><br />
+            /><br />*/}
             <RaisedButton
                 style={size}
                 label="Facebook"

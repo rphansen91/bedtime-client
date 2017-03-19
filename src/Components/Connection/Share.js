@@ -5,26 +5,30 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import { setShareData } from '../../Store/share';
 import { pluck } from 'rp-utils';
+import fbUI from '../../Facebook/ui';
+import FacebookIcon from '../Auth/Icons/Facebook';
 
 const protocol = pluck(window,'location.protocol') || '';
 const domain = pluck(window,'location.host') || '';
 
 const shareUrl = id => `${protocol}//${domain}/#/room?id=${id}`
 
-const ShareDialog = ({ share, handleClose }) => {
-    return <Dialog title={'Copy URL Below'}
-        contentStyle={{maxWidth: 320}}
+const ShareDialog = ({ share, user, invite, book, handleClose }) => {
+    const providerData = pluck(user, 'data.user.providerData') || [];
+    const userId = pluck(providerData[0], 'uid');
+    return <Dialog title={'Share With Family And Friends'}
+        contentStyle={{maxWidth: '100%',width: 420}}
         actions={[
             <FlatButton
                 label="Cancel"
-                primary={true}
                 onTouchTap={handleClose}
             />,
             <FlatButton
-                label="Copy"
-                primary={true}
+                label="Messenger"
                 keyboardFocused={true}
-                onTouchTap={handleClose}
+                labelPosition="after"
+                icon={<FacebookIcon style={{width:20,height:20}} />}
+                onTouchTap={() => invite(null, share)}
             />
         ]}
         modal={false}
@@ -32,7 +36,15 @@ const ShareDialog = ({ share, handleClose }) => {
         onRequestClose={handleClose}
         bodyStyle={{overflow: 'hidden'}}>
 
-        <TextField value={shareUrl(share)} />
+        {/*
+            (pluck(user, 'data.friends') || [])
+            .map((friend, i) => 
+                <div key={i} onClick={() => invite(friend.uid, share)}>
+                    { JSON.stringify(friend) }
+                </div>)
+        */}
+
+        {/*<TextField value={shareUrl(share)} fullWidth={true} />*/}
 
     </Dialog>
 }
@@ -40,6 +52,15 @@ const ShareDialog = ({ share, handleClose }) => {
 export default connect(
     state => state,
     dispatch => ({
-        handleClose: () => dispatch(setShareData(null))
+        handleClose: () => dispatch(setShareData(null)),
+        invite: (friendId, share) => {
+            dispatch(setShareData(null))
+            fbUI({
+                method: 'send',
+                to: friendId,
+                redirect_uri: pluck(window, 'location.href'),
+                link: 'https://bedbyestory.com/#/room?id=' + share
+            })
+        }
     })
 )(ShareDialog)

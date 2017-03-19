@@ -17,11 +17,11 @@ export default class Stream extends React.Component {
         return <div 
             className="connection-stream"
             ref="media"></div>
-        {/*<Card className="connection-stream">
+        {/*return <Card className="connection-stream">
             <CardHeader 
                 title={title(stream) }
                 subtitle={status(stream)} 
-                avatar={avatar(stream)}  >
+                avatar={avatar(stream)}>
             </CardHeader>
             <CardMedia>
                 <div ref="media"></div>

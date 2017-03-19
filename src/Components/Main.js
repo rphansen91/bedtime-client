@@ -65,7 +65,7 @@ export default connect(
             dispatch(fetchBooks(keywords || 'fairytale,nursery,childrens'))
         },
         setPath: (path) => {
-          dispatch(push(path));
+            dispatch(push(path));
         }
     })
 )(Main);

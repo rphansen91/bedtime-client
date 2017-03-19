@@ -73,6 +73,10 @@ export default connect(
     state => state,
     dispatch => ({
         selected: (book) => {
+            if (!book.url.includes('.pdf')) {
+                window.open(book.url);
+                return;
+            }
             dispatch(setBookData(book));
             if (book) dispatch(push('/room'));
         },

@@ -1,4 +1,5 @@
 import './db';
+import getFacebookData from '../Facebook/friends';
 const firebase = window.firebase;
 
 export const email = (data) => {
@@ -16,13 +17,24 @@ export const google = () => {
 export const facebook = () => {
     var provider = new firebase.auth.FacebookAuthProvider();
     provider.setCustomParameters({
-        'display': 'popup'
+        'display': 'popup',
+        'scope': 'email,user_friends,user_likes'
     });
 
-    return providerLogin(provider, 'facebook');
+    return providerLogin(provider, 'facebook')
+    .then((res) => {
+        return getFacebookData('/me/friends', res.credential.accessToken)
+        .then(friends => {
+            res.friends = friends.data;
+            return res;
+        })
+        .catch(err => {
+            res.friends = [];
+            return res;
+        })
+    });
 }
 
 function providerLogin (provider, name) {
-    console.log(provider);
     return firebase.auth().signInWithPopup(provider)
 }
