@@ -1,0 +1,9 @@
+{
+  "name": "Bed Bye Story",
+  "short_name": "Bed Bye Story",
+  "start_url": "./",
+  "display": "standalone",
+  "icons": [],
+  "background_color": "#333333",
+  "theme_color": "#3399cc"
+}

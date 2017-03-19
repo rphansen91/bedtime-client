@@ -1,0 +1,77 @@
+video {
+  max-width: 100%;
+}
+
+.login {
+  position: absolute;
+  margin-top: 76px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  z-index: 1;
+}
+
+.show {
+  transform: translate3d(0,0,0);
+  opacity: 1;
+  visibility: visible;
+  transition: 
+    opacity 0.3s ease-in, 
+    transform 0.3s ease-in, 
+    visibility 0s linear 0s;
+}
+.hide {
+  transform: translate3d(0,100%,0);
+  opacity: 0;
+  visibility: hidden;
+  transition: 
+    opacity 0.3s ease-in, 
+    transform 0.3s ease-in, 
+    visibility 0s linear 0.3s;
+}
+.right {
+  transform: translate3d(100%,0,0);
+}
+.left {
+  transform: translate3d(-100%,0,0);
+}
+
+.book {
+  position: relative;
+  text-align: center;
+}
+
+.page {
+  position: absolute;
+  margin: auto;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+@media all and (max-width: 767px) {
+  .connection-drawer {
+    position: relative;
+    z-index: 1000;
+  }
+  .connection-drawer>div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    top: 0!important;
+    left: 0!important;
+    width: 100%!important;
+    height: 40vh!important;
+    overflow: hidden!important;
+  }
+  .connection-bar {
+    flex-basis: 100%;
+  }
+  .connection-stream {
+    flex-basis: 50%;
+  }
+}
