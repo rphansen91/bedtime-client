@@ -10,6 +10,7 @@ import { Main } from '../Display/Main';
 import { Header, Title } from '../Display/Header';
 import { setBookData } from '../../Store/book';
 import BookList from './Book/List';
+import { selectFreeBook, selectAmazonBook } from '../../track/books';
 
 const styles = {
   root: {
@@ -40,8 +41,8 @@ const styles = {
 
 const BookShelf = ({ books, selected, selectedFile }) => 
     <Main>
-        <Header img="//bedbyestory.com/library/imgs/header.jpg" height="40vh">
-            <Title>They grow up fast...<br/>Play a role in the story!</Title>
+        <Header img="https://bedbyestory.com/library/imgs/header.jpg" height="40vh">
+            <Title>They grow up fast<br/>Play a role in the story!</Title>
         </Header>
 
         {/*<RaisedButton label="Upload Book"
@@ -73,12 +74,17 @@ export default connect(
     state => state,
     dispatch => ({
         selected: (book) => {
-            if (!book.url.includes('.pdf')) {
+            if (book && !book.url.includes('.pdf')) {
+                selectAmazonBook();
                 window.open(book.url);
                 return;
             }
+
             dispatch(setBookData(book));
-            if (book) dispatch(push('/room'));
+            if (book) {
+                selectFreeBook();
+                dispatch(push('/room'));
+            }
         },
         selectedFile: (file) => {
             console.log(file);

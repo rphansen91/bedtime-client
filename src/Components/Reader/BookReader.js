@@ -14,6 +14,7 @@ import { api } from '../../utils/env';
 
 import { Book, Controls } from './Book';
 import { setBookData } from '../../Store/book';
+import { readBook } from '../../track/books';
 
 let PDFJS;
 
@@ -21,7 +22,7 @@ const pdfjs = () => new Promise((res, rej) => {
     if (window.PDFJS) return res(); 
 
     const script = document.createElement('script');
-    script.src = process.env.PUBLIC_URL + '/library/js/pdf.min.js';
+    script.src = process.env.PUBLIC_URL + 'library/js/pdf.min.js';
     script.onload = res;
     script.onerror = rej;
     document.body.appendChild(script);
@@ -65,8 +66,22 @@ class BookReader extends React.Component {
         this.setState({ loading: true, pages: [], error: null });
 
         loadBook(book)
-        .then(loadPages)
-        .then(pages => this.setState({ pages, loading: false }))
+        .then(book => {
+            const _this = this;
+            (function loadPage (index) {
+                if (index > book.numPages) {
+                    return _this.setState({ loading: false });
+                }
+            
+                book.getPage(index)
+                .then(page => {
+                    const pages = _this.state.pages;
+                    _this.setState({ pages: [...pages, page] })
+                    setTimeout(() => loadPage(++index), 100);
+                })
+                .catch(err => loadPage(++index))
+            })(0)
+        })
         .catch(error => this.setState({ error, loading: false }))
     }
 
@@ -110,22 +125,43 @@ class BookReader extends React.Component {
                 value={book.page || 0} 
                 min={0} 
                 max={pages.length - 1} 
-                style={{position:'absolute', top: 0, height: 12,borderRadius: 0}} />
+                style={{position:'absolute', top: 0, height: 12,borderRadius: 0,zIndex: 5}} />
                 { 
                     (pages || [])
                     .map(this.renderPage.bind(this)) 
                 }
                 <Error>{ error ? error.message ? error.message : error : '' }</Error>
                 <Controls.Prev visible={this.hasPrev()}>
-                    <IconButton onTouchTap={()=> prev(book)}><Prev /></IconButton>
+                    <IconButton onTouchTap={()=> prev(book, pages.length)}><Prev /></IconButton>
                 </Controls.Prev>
                 <Controls.Next visible={this.hasNext()}>
-                    <IconButton onTouchTap={()=> next(book)}><Next /></IconButton>
+                    <IconButton onTouchTap={()=> next(book, pages.length)}><Next /></IconButton>
                 </Controls.Next>
             </Book>
         )
     }
 }
+
+const handleQuartiles = (function () {
+
+    const handled = {}
+    const quartiles = () => [1,25,50,75,100];
+
+    return (book, count) => {
+        const bookQuartiles = handled[book.url] || quartiles();
+        const percent = (book.page / count) * 100;
+        const nextQuartile = bookQuartiles[0];
+        console.log(percent, book.url, bookQuartiles);
+
+        if (nextQuartile && percent >= nextQuartile) {
+            bookQuartiles.splice(0,1);
+            console.log("======READ BOOK "+nextQuartile+"%=====")
+            readBook(nextQuartile+'');
+        }
+
+        handled[book.url] = bookQuartiles;
+    }
+})()
 
 export default connect(
     state => ({
@@ -141,11 +177,12 @@ export default connect(
             });
             dispatch(setBookData(lastPage));
         },
-        next: (book) => {
+        next: (book, pageCount) => {
             const page = book.page || 0;
             const nextPage = Object.assign({}, book, {
                 page: page+1
             });
+            handleQuartiles(nextPage, pageCount-1);
             dispatch(setBookData(nextPage));
         }
     })

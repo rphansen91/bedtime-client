@@ -11,3 +11,9 @@ export const Main = styled.main`
         width: 100%;
     }
 `
+
+export const Center = styled.section`
+    position: relative;
+    top: 50%; left: 50%;
+    transform: translate3d(-50%,-50%,0);
+`

@@ -34,6 +34,8 @@ export const Header = styled.header`
 export const Title = styled.h1`
     color: #fff;
     text-align: center;
-    font-family: chalkboard;
+    font-family: 'Permanent Marker', sans-serif;
+    letterSpacing: 0.2em;
     z-index: 1;
+    margin: 0;
 `

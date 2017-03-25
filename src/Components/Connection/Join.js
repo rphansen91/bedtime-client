@@ -5,6 +5,7 @@ import { enter } from 'redux-rtc';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { pluck } from 'rp-utils';
+import { joinRoomRequest } from '../../track/rooms';
 
 const JoinPrompt = ({ sharedId, join, close, children }) =>
     <Dialog title={"Would you like to join room id: " + sharedId}
@@ -34,8 +35,9 @@ export default connect(
     }),
     dispatch => ({
         join: (id) => {
-            dispatch(push('/room'))
-            dispatch(enter(id))
+            dispatch(push('/room'));
+            dispatch(enter(id));
+            joinRoomRequest();
         },
         close: () => dispatch(push('/'))
     })

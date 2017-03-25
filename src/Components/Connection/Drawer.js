@@ -34,7 +34,7 @@ const StreamDrawer = ({ streams, loggedIn, joinRoom }) =>
         {
             streams.length?
                 streams.map((s, i) => <Stream key={i} stream={s} />):
-                <Header img="//bedbyestory.com/library/imgs/main.jpg">
+                <Header img="https://bedbyestory.com/library/imgs/main.jpg" style={{height: 'calc(100% - 60px)'}}>
                     <Title>Get Started!</Title>
                     {
                         !loggedIn ?

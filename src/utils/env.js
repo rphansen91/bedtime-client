@@ -1,5 +1,5 @@
 const env = {
-    api: '//api.bedbyestory.com/'
+    api: 'https://api.bedbyestory.com/'
 }
 
 module.exports = env;

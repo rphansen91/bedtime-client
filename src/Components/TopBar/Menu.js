@@ -11,6 +11,7 @@ export default ({ open, setDrawer, onTap }) =>
     <Drawer open={open} width={300} docked={false}
         onRequestChange={o => setDrawer(o)}>
 
+        <div style={{margin: 20}}></div>
         <MenuItem onClick={()=>onTap('/')} leftIcon={<Home />}>Home</MenuItem>
         <MenuItem onClick={()=>onTap('/buy')} leftIcon={<Card />}>Buy</MenuItem>
         <MenuItem onClick={()=>onTap('/library')} leftIcon={<Library />}>My Library</MenuItem>

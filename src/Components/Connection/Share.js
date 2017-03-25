@@ -7,6 +7,7 @@ import { setShareData } from '../../Store/share';
 import { pluck } from 'rp-utils';
 import fbUI from '../../Facebook/ui';
 import FacebookIcon from '../Auth/Icons/Facebook';
+import { shareRoomFacebook } from '../../track/rooms';
 
 const protocol = pluck(window,'location.protocol') || '';
 const domain = pluck(window,'location.host') || '';
@@ -54,13 +55,14 @@ export default connect(
     dispatch => ({
         handleClose: () => dispatch(setShareData(null)),
         invite: (friendId, share) => {
+            shareRoomFacebook();//ANALYTICS
             dispatch(setShareData(null))
             fbUI({
                 method: 'send',
                 to: friendId,
                 redirect_uri: pluck(window, 'location.href'),
                 link: 'https://bedbyestory.com/#/room?id=' + share
-            })
+            });
         }
     })
 )(ShareDialog)
