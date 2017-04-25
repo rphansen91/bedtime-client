@@ -13,7 +13,8 @@ import Join from './Connection/Join';
 import Share from './Connection/Share';
 import LoginPrompt from './Auth/LoginPrompt';
 import { fetchBooks } from '../Store/books';
-import { pluck } from 'rp-utils';
+import { pluck, flow } from 'rp-utils';
+import { refreshVideos } from '../utils/native';
 
 injectTapEventPlugin();
 
@@ -29,6 +30,7 @@ class Main extends Component {
   }
   setMenu (menuOpen) {
     this.setState({ menuOpen })
+    refreshVideos()
   }
   render() {
     const { book, history, setPath } = this.props;
@@ -40,18 +42,18 @@ class Main extends Component {
           <TopBar 
             onOpen={this.setMenu.bind(this, true)} 
             onLogoTap={() => setPath('/')} />
-          
-          <Menu open={menuOpen} setDrawer={this.setMenu.bind(this)} 
-            onTap={(p) => {
-              this.setMenu(false);
-              setPath(p)
-            }}/>
-
-          <Connections />
+          <Connections layer={menuOpen ? -1 : 0} />
           <LoginPrompt open={false} />
           <Share />
           <Join />
           <Routes history={history} />
+          <Menu open={menuOpen} 
+            style={{zIndex: 1001}}
+            setDrawer={this.setMenu.bind(this)} 
+            onTap={(p) => {
+              this.setMenu(false);
+              setPath(p)
+            }}/>
         </div>
       </MuiThemeProvider>
     );

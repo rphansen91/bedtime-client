@@ -1,4 +1,4 @@
-import getBooks from '../utils/books';
+import getBooks, { freeBooks, amazonBooks } from '../utils/books';
 
 const REQUEST_BOOKS = 'REQUEST_BOOKS';
 const RECEIVE_BOOKS = 'RECEIVE_BOOKS';
@@ -26,7 +26,7 @@ const bookState = (data, isLoading, isError) => ({
 export const books = (state=bookState(), action) => {
     switch (action.type) {
         case REQUEST_BOOKS: return bookState(null,true,null);
-        case RECEIVE_BOOKS: return bookState(action.payload,false,null);
+        case RECEIVE_BOOKS: return bookState(Object.assign({}, state.data, action.payload),false,null);
         case ERROR_BOOKS: return bookState(null,false,action.payload);
         default: return state; 
     }
@@ -34,15 +34,14 @@ export const books = (state=bookState(), action) => {
 
 export const fetchBooks = (keywords) => {
     return dispatch => {
+        const amazon = amazonBooks(keywords);
+        const free = freeBooks();
+
         dispatch(requestBooks());
-        return getBooks(keywords)
-        .then(books => {
-            console.log(books);
-            dispatch(receiveBooks(books));
-        })
-        .catch(err => {
-            console.log(err);
-            dispatch(errorBooks(err));
-        })
+
+        return free
+        .then(books => dispatch(receiveBooks({ 'Free Books': books })))
+        .then(() => amazon)
+        .then(books => dispatch(receiveBooks({ 'Amazon Books': books })))
     }
 }

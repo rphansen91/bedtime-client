@@ -8,11 +8,7 @@ import { pluck } from 'rp-utils';
 import fbUI from '../../Facebook/ui';
 import FacebookIcon from '../Auth/Icons/Facebook';
 import { shareRoomFacebook } from '../../track/rooms';
-
-const protocol = pluck(window,'location.protocol') || '';
-const domain = pluck(window,'location.host') || '';
-
-const shareUrl = id => `${protocol}//${domain}/#/room?id=${id}`
+import shareUrl from '../../utils/shareUrl';
 
 const ShareDialog = ({ share, user, invite, book, handleClose }) => {
     const providerData = pluck(user, 'data.user.providerData') || [];
@@ -61,7 +57,7 @@ export default connect(
                 method: 'send',
                 to: friendId,
                 redirect_uri: pluck(window, 'location.href'),
-                link: 'https://bedbyestory.com/#/room?id=' + share
+                link: shareUrl(share)
             });
         }
     })

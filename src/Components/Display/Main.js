@@ -9,6 +9,7 @@ export const Main = styled.main`
     @media all and (max-width: 767px) {
         position: inherit;
         width: 100%;
+        padding-top: 100%;
     }
 `
 
@@ -16,4 +17,9 @@ export const Center = styled.section`
     position: relative;
     top: 50%; left: 50%;
     transform: translate3d(-50%,-50%,0);
+
+    @media all and (max-width: 767px) {
+        top: inherit; left: inherit;
+        transform: none;
+    }
 `

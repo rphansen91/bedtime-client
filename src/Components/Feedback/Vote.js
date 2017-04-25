@@ -4,22 +4,12 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Liked from 'material-ui/svg-icons/action/thumb-up';
 import Disiked from 'material-ui/svg-icons/action/thumb-down';
 import Paper from 'material-ui/Paper';
+import Container from './Container';
+import Thanks from './Thanks';
 
 const actionIcon = {
     margin: 10
 }
-
-const container = {
-    maxWidth: '100%',
-    width: 320,
-    padding: 10,
-    fontSize: '2em',
-    textAlign: 'center',
-    display: 'inline-block',
-}
-
-const Container = ({ children }) =>
-    <Center><Paper zDepth={3} style={container}>{ children }</Paper></Center>
 
 export default class extends React.Component {
     constructor (props) {
@@ -39,9 +29,7 @@ export default class extends React.Component {
             <Main style={{height: '100%'}}>
                 {
                     voted ?
-                    <Container>
-                        <p>Thanks for the Feedback!</p>
-                    </Container>:
+                    <Thanks />:
                     <Container>
                         <p>{ assumption }</p>
                         <FloatingActionButton 

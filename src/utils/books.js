@@ -1,12 +1,20 @@
 import { api } from './env';
 
-const freeBooks = () =>
-    fetch(`${api}free`)
-    .then(res => res.json())
+const formatResonse = (res) => {
+    return res.json()
+    .then(books => {
+        if (books.err) return []
+        return books
+    })
+}
 
-const amazonBooks = (keywords) => 
+export const freeBooks = () =>
+    fetch(`${api}free`)
+    .then(formatResonse)
+
+export const amazonBooks = (keywords) => 
     fetch(`${api}/amazon/search?Keywords=${keywords}`)
-    .then(res => res.json())
+    .then(formatResonse)
 
 export default (keywords) => 
     Promise.all([

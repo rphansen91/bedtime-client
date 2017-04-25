@@ -8,6 +8,7 @@ import { user } from './user';
 import { books } from './books';
 import { book } from './book';
 import { share } from './share';
+import { enterRoomId } from './join';
 
 const rootReducer = combineReducers({
     book,
@@ -15,10 +16,17 @@ const rootReducer = combineReducers({
     user,
     share,
     rtc,
+    enterRoomId,
     routing: routerReducer
 });
 
+const middleware = [
+  createLogger(), 
+  connected, 
+  routerMiddleware(hashHistory)
+]
+
 export default createStore(
   rootReducer, 
-  applyMiddleware(createLogger(), connected, routerMiddleware(hashHistory))
+  applyMiddleware(...middleware)
 );

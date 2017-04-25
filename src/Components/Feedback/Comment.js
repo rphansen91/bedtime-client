@@ -1,25 +1,14 @@
 import React from 'react';
 import { Main, Center } from '../Display/Main';
+import Container from './Container';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Go from 'material-ui/svg-icons/navigation/arrow-forward';
-import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+import Thanks from './Thanks';
 
 const actionIcon = {
     margin: 10
 }
-
-const container = {
-    width: 320,
-    padding: 10,
-    maxWidth: '100%',
-    fontSize: '2em',
-    textAlign: 'center',
-    display: 'inline-block',
-}
-
-const Container = ({ children }) =>
-    <Center><Paper zDepth={3} style={container}>{ children }</Paper></Center>
 
 export default class extends React.Component {
     constructor (props) {
@@ -43,9 +32,7 @@ export default class extends React.Component {
             <Main style={{height: '100%'}}>
                 {
                     sent ?
-                    <Container>
-                        <p>Thanks for the Feedback!</p>
-                    </Container>:
+                    <Thanks />:
                     <Container>
                         <p>{ assumption }</p>
                         <TextField

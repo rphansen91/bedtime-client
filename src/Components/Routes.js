@@ -10,12 +10,20 @@ import BookReader from './Reader/BookReader';
 import ReviewBooks from './Review/Books';
 import Vote from './Feedback/Vote';
 import Comment from './Feedback/Comment';
+import LogoFeedback from './Feedback/Logos';
 
 const UserIsAuthenticated = UserAuthWrapper({
   authSelector: state => state.user.data,
   redirectAction: replace,
   failureRedirectPath: '/login',
   wrapperDisplayName: 'UserIsAuthenticated'
+});
+
+const BookIsSelected = UserAuthWrapper({
+  authSelector: state => state.book ? state.book : false,
+  redirectAction: replace,
+  failureRedirectPath: '/',
+  wrapperDisplayName: 'BookIsSelected'
 })
 
 const { library, buy, support } = trackFeatures
@@ -40,17 +48,16 @@ const Routing = ({ history, book, setPath }) => {
             <Route path="/library" component={LibraryFeedback} />
             <Route path="/buy" component={BuyFeedback} />
             <Route path="/support" component={Support} />
-            <Route path="/room" component={BookReader}
-                onEnter={() => {
-                    console.log('BOOK',book);
-                    {/*if (!book) setPath('/');*/}
-                }} />
+            <Route path="/logos" component={LogoFeedback} /> 
+            <Route path="/room" component={BookIsSelected(BookReader)} />
         </Route>
     </Router>
 }
 
 export default connect(
-    state => state,
+    state => ({ 
+        book: state.book 
+    }),
     dispatch => ({
         setPath: (p) => {
             dispatch(push(p));

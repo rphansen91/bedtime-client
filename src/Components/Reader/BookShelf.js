@@ -39,9 +39,16 @@ const styles = {
   }
 };
 
+const hasBooks = (books) => {
+    return Array.isArray(books) && books.length
+}
+
 const BookShelf = ({ books, selected, selectedFile }) => 
     <Main>
-        <Header img="https://bedbyestory.com/library/imgs/header.jpg" height="40vh">
+        <Header style={{
+            backgroundImage: 'url(https://bedbyestory.com/library/imgs/header.jpg)',
+            height: '40vh'
+        }}>
             <Title>They grow up fast<br/>Play a role in the story!</Title>
         </Header>
 
@@ -59,6 +66,7 @@ const BookShelf = ({ books, selected, selectedFile }) =>
                 
                 { 
                     Object.keys(books.data || {})
+                    .filter(name => hasBooks(books.data[name]))
                     .map(name => 
                         <BookList 
                         key={name}
@@ -80,11 +88,9 @@ export default connect(
                 return;
             }
 
+            selectFreeBook();
             dispatch(setBookData(book));
-            if (book) {
-                selectFreeBook();
-                dispatch(push('/room'));
-            }
+            dispatch(push('/room'));
         },
         selectedFile: (file) => {
             console.log(file);

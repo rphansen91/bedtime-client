@@ -1,22 +1,28 @@
 import React from 'react';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import { pluck } from 'rp-utils'
+import { pluck, flow } from 'rp-utils';
+import { refreshVideos } from '../../utils/native';
 
 const title = s => pluck(s, 'user.displayName') || '';
 const status = s => pluck(s, 'user.status') || '';
 const avatar = s => pluck(s, 'user.photoURL') || process.env.PUBLIC_URL + '/library/imgs/pillow.png';
 
 export default class Stream extends React.Component {
-    componentDidMount () {
-        const element = pluck(this.props, 'stream.mediaElement');
-        element && this.refs.media.appendChild(element);
+    constructor (props) {
+        super(props);
+        this.componentDidMount = refreshVideos;
+        this.componentWillReceiveProps = refreshVideos;
+        this.componentDidUpdate = refreshVideos;
     }
     render () {
-        const { stream } = this.props;
-        return <div 
+        const { stream, style, layer } = this.props;
+        return <div style={style || {}} 
             className="connection-stream"
-            ref="media"></div>
+            ref="media">
+                <video style={{zIndex: layer}} 
+                src={stream.blobURL} />
+            </div>
         {/*return <Card className="connection-stream">
             <CardHeader 
                 title={title(stream) }

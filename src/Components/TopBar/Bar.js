@@ -14,7 +14,7 @@ export default ({ onOpen, onLogoTap, title }) =>
         style={{position: 'fixed'}}
         title={
             <span style={{cursor: 'pointer',fontFamily: '"Permanent Marker", sans-serif', fontSize: 20, letterSpacing: '0.2em'}} 
-            onClick={onLogoTap}>{ title || "Bed Bye Story" }</span>
+            onClick={onLogoTap}>{ title || "Syncbook" }</span>
         }
         iconElementLeft={<Menu onTap={onOpen} />}
         iconElementRight={<Action />} />

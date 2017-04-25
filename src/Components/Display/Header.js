@@ -1,10 +1,5 @@
 import styled from 'styled-components';
 
-const backgroundImg = (props) => {
-    if (props.img) return `url(${props.img})`;
-    return ''
-}
-
 const cover = `
     position: absolute;
     top: 0;
@@ -19,9 +14,10 @@ export const Header = styled.header`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: ${props => backgroundImg(props)} center no-repeat;
     background-size: cover;
-    height: ${props => props.height || '100%'}
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
     width: 100%;
 
     &:after {

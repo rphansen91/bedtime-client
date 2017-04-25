@@ -5,6 +5,7 @@ import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconCam from 'material-ui/svg-icons/av/videocam';
+import GetApp from 'material-ui/svg-icons/action/info';
 import Stream from './Stream';
 import Login from '../Auth/Login';
 import { pluck } from 'rp-utils';
@@ -12,19 +13,25 @@ import { Header, Title } from '../Display/Header';
 import Action from './Action';
 import { openAndShare } from '../../Store/share';
 
+const RTCAvailable = (window.RTCPeerConnection) ? true : false;
+const goToAppStore = () => {};
 const Empty = () => <div></div>
 
 const RoomButton = ({ onTap, label }) => 
-    <RaisedButton label={label}
+    <RaisedButton label={RTCAvailable ? "Create Room" : "Not Supported"} 
         style={{marginTop: 20}}
-        onTouchTap={onTap}
-        labelPosition="before"
-        secondary={true}
-        icon={<IconCam />}>
+        onTouchTap={RTCAvailable ? onTap : goToAppStore}
+        labelPosition={"before"}
+        secondary={RTCAvailable}
+        icon={RTCAvailable ? <IconCam /> : <Empty />}>
     </RaisedButton>
 
-const StreamDrawer = ({ streams, loggedIn, joinRoom }) =>
-    <Drawer open={true} width={300} openSecondary={true} className="connection-drawer">
+const StreamDrawer = ({ streams, loggedIn, joinRoom, layer }) =>
+    <Drawer 
+    open={true} 
+    width={300} 
+    openSecondary={true} 
+    className="connection-drawer">
         <AppBar title="Peers" 
             className="connection-bar"
             style={{height: 60}}
@@ -33,14 +40,16 @@ const StreamDrawer = ({ streams, loggedIn, joinRoom }) =>
         
         {
             streams.length?
-                streams.map((s, i) => <Stream key={i} stream={s} />):
-                <Header img="https://bedbyestory.com/library/imgs/main.jpg" style={{height: 'calc(100% - 60px)'}}>
+                streams.map((s, i) => <Stream key={i} stream={s} layer={layer} />):
+                <Header style={{
+                    backgroundImage: 'url(https://bedbyestory.com/library/imgs/main.jpg)',
+                    height: 'calc(100% - 60px)'
+                }} >
                     <Title>Get Started!</Title>
                     {
                         !loggedIn ?
                             <Login />:
-                            <RoomButton label={"Create Room"} 
-                                onTap={() => joinRoom()} />
+                            <RoomButton onTap={() => joinRoom()} />
                     }
                 </Header>
         }
@@ -51,7 +60,7 @@ export default connect(
         loggedIn: true || pluck(state,'user.data'),
         streams: state.rtc.streams
     }),
-    (dispatch) => ({
+    dispatch => ({
         joinRoom: () => dispatch(openAndShare())
     })
 )(StreamDrawer);

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 
 export const List = styled.div`
+    display: flex;
     position: relative;
     overflow-x: auto;
     white-space: nowrap;
@@ -18,8 +19,12 @@ export const List = styled.div`
 
 List.Item = styled.div`
     position: relative;
-    display: inline-block;
     cursor: pointer;
+    background: #ffffff linear-gradient(to top, #ffffff 0%, #efefef 100%);
+    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 6px;
 `
 
 List.Name = styled.h4`
@@ -64,11 +69,14 @@ export const Cover = styled.div`
 
 export const Title = styled.p`
     position: relative;
-    min-height: 2em;
-    max-height: 2em;
+    height: 3.05em;
     margin: 0;
     margin-top: 1em;
     line-height: 1em;
     overflow: hidden;
     white-space: normal;
+    padding-top: 20px;
+    text-align: center;
+    border-top: 1px solid rgba(0,0,0,0.4);
+    //box-shadow: 0px -8px 4px -4px rgba(0,0,0,0.4);
 `
